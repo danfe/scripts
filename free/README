@@ -1,0 +1,4 @@
+FreeBSD lacks free(1) program; these are some attempts to reimplement it:
+
+  - mem.bash (sent to freebsd-hackers@ on 2011/02/23 by drbaud@yahoo.com)
+  - well-known Perl version (from http://www.cyberciti.biz/files/scripts/)
