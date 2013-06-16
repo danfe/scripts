@@ -56,14 +56,26 @@ test_freq()
 	ramp_down $msr
 }
 
+vchange_percent()
+{
+	local vid0 vstep
+
+	# default values are for pentium m; adjust for your cpu
+	vid0=700
+	vstep=16
+
+	echo $((100 - 100 * (vid0 + $1 * vstep) / (vid0 + $2 * vstep)))
+}
+
 set_freq_vid()
 {
-	local msr psv
+	local msr dif psv
 
 	sysctl dev.cpu.0.freq=$1
 	msr=$(cpucontrol -m 0x198 /dev/cpuctl0 | cut -d\  -f4)
 	psv=$(printf 0x%x $((msr & 0xffc0 | $2)))
-	echo "==> setting vid $2 (psv $psv) for $1 mhz"
+	dif=$(vchange_percent $2 $((msr & 63)))
+	echo "==> setting vid $2 (psv $psv) for $1 mhz: $dif% undervolt"
 	cpucontrol -m 0x199=$psv /dev/cpuctl0
 }
 
