@@ -56,6 +56,20 @@ test_freq()
 	ramp_down $msr
 }
 
+# Data for some common CPUs:
+# (from http://www.projectosx.com/forum/index.php?showtopic=610)
+#
+#   CPU series     | Vid0  | Vstep | Vboot  | Vmin  | Vmax
+#  ----------------+-------+-------+--------+-------+--------
+#   Pentium M      | 700,0 | 16,0  | xxxx,x | xxx,x | xxxx,x
+#   E6000, E4000   | 825,0 | 12,5  | 1100,0 | 850,0 | 1500,0
+#   E8000, E7000   | 825,0 | 12,5  | 1100,0 | 850,0 | 1362,5
+#   X9000          | 712,5 | 12,5  | 1200,0 | 800,0 | 1325,0
+#   T9000          | 712,5 | 12,5  | 1200,0 | 750,0 | 1300,0
+#   P9000, P8000   | 712,5 | 12,5  | 1200,0 | 750,0 | 1300,0
+#   Q9000D, Q8000D | 825,0 | 12,5  | 1100,0 | 850,0 | 1362,5
+#   Q9000M         | 712,5 | 12,5  | 1200,0 | 850,0 | 1300,0
+
 vchange_percent()
 {
 	local vid0 vstep
@@ -69,7 +83,7 @@ vchange_percent()
 
 set_freq_vid()
 {
-	local msr dif psv
+	local dif msr psv
 
 	sysctl dev.cpu.0.freq=$1
 	msr=$(cpucontrol -m 0x198 /dev/cpuctl0 | cut -d\  -f4)
